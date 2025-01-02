@@ -1,0 +1,46 @@
+#Code For Project:
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+import numpy as np
+
+# Load the Iris dataset
+iris = load_iris()
+X = iris.data
+y = iris.target
+
+# Split the dataset
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Train a Random Forest Classifier
+model = RandomForestClassifier(random_state=42)
+model.fit(X_train, y_train)
+
+# Model evaluation
+accuracy = model.score(X_test, y_test)
+print(f"Model accuracy: {accuracy:.2f}")
+
+# Function to predict class for given features
+def predict_class(features):
+    prediction = model.predict([features])
+    predicted_class = iris.target_names[prediction[0]]
+    return predicted_class
+
+# Interactive feature input
+print("Enter 4 feature values separated by commas (e.g., 5.1,3.5,1.4,0.2) or type 'exit' to quit.")
+while True:
+    user_input = input("Feature values (comma-separated): ")
+    if user_input.lower() == 'exit':
+        print("Exiting...")
+        break
+    try:
+        # Parse the input
+        features = [float(x) for x in user_input.split(",")]
+        if len(features) != 4:
+            print("Error: Please enter exactly 4 values.")
+        else:
+            # Predict and display the result
+            predicted_class = predict_class(features)
+            print(f"Predicted class for features {features}: {predicted_class}")
+    except ValueError:
+        print("Error: Please enter valid numeric values separated by commas.")
